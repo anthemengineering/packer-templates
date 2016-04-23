@@ -7,6 +7,7 @@
 mkdir -p /media/cdrom
 mount -t iso9660 -o ro /dev/cdrom /media/cdrom
 yum --disablerepo=\* --enablerepo c6-media,base -y install \
+    bzip2 \
     gcc \
     kernel-devel \
     perl

@@ -4,11 +4,11 @@
         "guest_os_type": "RedHat_64",
         "disk_size": 20480,
         "iso_urls": [
-            "CentOS-6.7-x86_64-minimal.iso",
-            "http://mirrors.kernel.org/centos/6.7/isos/x86_64/CentOS-6.7-x86_64-minimal.iso",
-            "http://vault.centos.org/centos/6.7/isos/x86_64/CentOS-6.7-x86_64-minimal.iso"
+            "CentOS-7-x86_64-Minimal-1511.iso",
+            "http://mirrors.kernel.org/centos/7.2.1511/isos/x86_64/CentOS-7-x86_64-Minimal-1511.iso",
+            "http://vault.centos.org/centos/7.2.1511/isos/x86_64/CentOS-7-x86_64-Minimal-1511.iso"
         ],
-        "iso_checksum": "9d3fec5897be6b3fed4d3dda80b8fa7bb62c616bbfd4bdcd27295ca9b764f498",
+        "iso_checksum": "f90e4d28fa377669b2db16cbcb451fcb9a89d2460e3645993e30e137ac37d284",
         "iso_checksum_type": "sha256",
         "ssh_username": "root",
         "ssh_password": "packer",
@@ -19,7 +19,7 @@
         "http_directory": ".",
         "shutdown_command": "shutdown -h now",
         "boot_command": [
-            "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/centos-6-ks.cfg<enter><wait>"
+            "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/centos-7-ks.cfg<enter><wait>"
         ]
     }],
     "provisioners": [{
@@ -32,7 +32,7 @@
         ]
     }],
     "post-processors": [{
-        "output": "centos-6.7-x86_64.box",
+        "output": "centos-7.2.1511-x86_64.box",
         "type": "vagrant"
     }]
 }
