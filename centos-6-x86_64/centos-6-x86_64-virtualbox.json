@@ -1,0 +1,41 @@
+{
+    "builders": [{
+        "type": "virtualbox-iso",
+        "guest_os_type": "RedHat_64",
+        "disk_size": 40960,
+        "iso_urls": [
+            "CentOS-6.8-x86_64-minimal.iso",
+            "http://mirrors.kernel.org/centos/6.8/isos/x86_64/CentOS-6.8-x86_64-minimal.iso",
+            "http://vault.centos.org/centos/6.8/isos/x86_64/CentOS-6.8-x86_64-minimal.iso"
+        ],
+        "iso_checksum": "ec49c297d484b9da0787e5944edc38f7c70f21c0f6a60178d8e9a8926d1949f4",
+        "iso_checksum_type": "sha256",
+        "ssh_username": "root",
+        "ssh_password": "packer",
+        "guest_additions_url": "http://download.virtualbox.org/virtualbox/4.2.36/VBoxGuestAdditions_4.2.36.iso",
+        "guest_additions_sha256": "f04d2a3293a46ae75fc69970e89350cd568054174f43fd04940891b0301b7b92",
+        "guest_additions_mode": "upload",
+        "guest_additions_path": "/root/VBoxGuestAdditions.iso",
+        "http_directory": ".",
+        "shutdown_command": "shutdown -h now",
+        "boot_command": [
+            "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/centos-6-ks.cfg<enter><wait>"
+        ],
+        "vboxmanage": [
+            ["modifyvm", "{{.Name}}", "--memory", "2048"],
+            ["modifyvm", "{{.Name}}", "--cpus", "2"]
+        ]
+    }],
+    "provisioners": [{
+        "type": "shell",
+        "scripts": [
+            "../scripts/virtualbox.sh",
+            "../scripts/vagrant.sh",
+            "../scripts/zero.sh"
+        ]
+    }],
+    "post-processors": [{
+        "type": "vagrant",
+        "output": "centos-6.8-x86_64.box"
+    }]
+}

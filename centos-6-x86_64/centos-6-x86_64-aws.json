@@ -2,7 +2,7 @@
     "builders": [{
         "type": "virtualbox-iso",
         "guest_os_type": "RedHat_64",
-        "disk_size": 20480,
+        "disk_size": 8192,
         "iso_urls": [
             "CentOS-6.8-x86_64-minimal.iso",
             "http://mirrors.kernel.org/centos/6.8/isos/x86_64/CentOS-6.8-x86_64-minimal.iso",
@@ -12,27 +12,33 @@
         "iso_checksum_type": "sha256",
         "ssh_username": "root",
         "ssh_password": "packer",
-        "guest_additions_url": "http://download.virtualbox.org/virtualbox/4.2.36/VBoxGuestAdditions_4.2.36.iso",
-        "guest_additions_sha256": "f04d2a3293a46ae75fc69970e89350cd568054174f43fd04940891b0301b7b92",
-        "guest_additions_mode": "upload",
-        "guest_additions_path": "/root/VBoxGuestAdditions.iso",
+        "guest_additions_mode": "disable",
+        "format": "ova",
         "http_directory": ".",
         "shutdown_command": "shutdown -h now",
         "boot_command": [
             "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/centos-6-ks.cfg<enter><wait>"
+        ],
+        "vboxmanage": [
+            ["modifyvm", "{{.Name}}", "--memory", "2048"],
+            ["modifyvm", "{{.Name}}", "--cpus", "2"]
         ]
     }],
     "provisioners": [{
         "type": "shell",
-        "only": ["virtualbox-iso"],
         "scripts": [
-            "../scripts/virtualbox.sh",
-            "../scripts/vagrant.sh",
+            "../scripts/aws.sh",
             "../scripts/zero.sh"
         ]
     }],
     "post-processors": [{
-        "output": "centos-6.8-x86_64.box",
-        "type": "vagrant"
+        "type": "amazon-import",
+        "region": "us-gov-west-1",
+        "s3_bucket_name": "ami.anthemengineering.com",
+        "s3_key_name": "centos-6.8-x86_64-minimal-{{timestamp}}.ova",
+        "skip_clean": "true",
+        "tags": {
+            "Description": "CentOS 6.8 x86_64 minimal ({{timestamp}})"
+        }
     }]
 }
